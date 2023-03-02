@@ -40,7 +40,6 @@ public class EnvioJavaMail extends JFrame {
 			}
 		});
 	}
-
 	public EnvioJavaMail() {
 		setTitle("Envio de email");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -82,53 +81,54 @@ public class EnvioJavaMail extends JFrame {
 		JButton btnNewButton = new JButton("Enviar");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String username = "seu-email-hotmail-aqui@hotmail.com"; // substitua com o seu email
-				String password = "sua senha aqui"; // substitua com a sua senha
-				String emailTo = emailToField.getText();
-				String emailSubject = emailSubjectField.getText();
-				String emailMessage = emailMessageArea.getText();
+			    String username = "seu-email-aqui@hotmail.com"; // substitua com o seu email
+			    String password = "sua senha aqui"; // substitua com a sua senha
+			    String emailTo = emailToField.getText().trim();
+			    String[] emailToSplit = emailTo.split(",");
+			    String emailSubject = emailSubjectField.getText();
+			    String emailMessage = emailMessageArea.getText();
 
-				if (username.isEmpty() || password.isEmpty() || emailTo.isEmpty() || emailSubject.isEmpty()
-						|| emailMessage.isEmpty()) {
-					JOptionPane.showMessageDialog(EnvioJavaMail.this, "Preencha todos os campos.");
-					return;
-				}
+			    if (username.isEmpty() || password.isEmpty() || emailTo.isEmpty() || emailSubject.isEmpty()
+			            || emailMessage.isEmpty()) {
+			        JOptionPane.showMessageDialog(EnvioJavaMail.this, "Preencha todos os campos.");
+			        return;
+			    }
+			    // Configuração das propriedades
+			    String host = "smtp-mail.outlook.com";
+			    int port = 587;
+			    Properties props = new Properties();
+			    props.put("mail.smtp.auth", "true");
+			    props.put("mail.smtp.starttls.enable", "true");
+			    props.put("mail.smtp.host", host);
+			    props.put("mail.smtp.port", port);
+			    props.put("mail.smtp.socketfactory.port", "465");
+			    props.put("mail.smtp.socketfactory.class", "javax.net.ssl.SSLSocketFactory");
 
-				// Configuração das propriedades
-				String host = "smtp-mail.outlook.com";
-				int port = 587;
-				Properties props = new Properties();
-				props.put("mail.smtp.auth", "true");
-				props.put("mail.smtp.starttls.enable", "true");
-				props.put("mail.smtp.host", host);
-				props.put("mail.smtp.port", port);
-				props.put("mail.smtp.socketfactory.port", "465");
-				props.put("mail.smtp.socketfactory.class", "javax.net.ssl.SSLSocketFactory");
+			    // Autenticação do usuário
+			    Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+			        protected PasswordAuthentication getPasswordAuthentication() {
+			            return new PasswordAuthentication(username, password);
+			        }
+			    });
 
-				// Autenticação do usuário
-				Session session = Session.getInstance(props, new javax.mail.Authenticator() {
-					protected PasswordAuthentication getPasswordAuthentication() {
-						return new PasswordAuthentication(username, password);
-					}
-				});
+			    try {
+			        // Cria a mensagem de email
+			        Message message = new MimeMessage(session);
+			        message.setFrom(new InternetAddress(username));
+			        for (String address : emailToSplit) {
+			            message.addRecipient(Message.RecipientType.TO, new InternetAddress(address.trim()));
+			        }
+			        message.setSubject(emailSubject);
+			        message.setText(emailMessage);
 
-				try {
-					// Cria a mensagem de email
-					Message message = new MimeMessage(session);
-					message.setFrom(new InternetAddress(username));
-					message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emailTo));
-					message.setSubject(emailSubject);
-					message.setText(emailMessage);
+			        // Envia a mensagem
+			        Transport.send(message);
 
-					// Envia a mensagem
-					Transport.send(message);
+			        JOptionPane.showMessageDialog(EnvioJavaMail.this, "Email enviado com sucesso!");
 
-					JOptionPane.showMessageDialog(EnvioJavaMail.this, "Email enviado com sucesso!");
-
-				} catch (MessagingException ex) {
-					JOptionPane.showMessageDialog(EnvioJavaMail.this, "Erro ao enviar email: " + ex.getMessage());
-				}
-
+			    } catch (MessagingException ex) {
+			        JOptionPane.showMessageDialog(EnvioJavaMail.this, "Erro ao enviar email: " + ex.getMessage());
+			    }
 			}
 		});
 		btnNewButton.setBounds(170, 403, 89, 23);
