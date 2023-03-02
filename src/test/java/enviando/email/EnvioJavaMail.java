@@ -13,13 +13,16 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
 public class EnvioJavaMail extends JFrame {
@@ -81,7 +84,7 @@ public class EnvioJavaMail extends JFrame {
 		JButton btnNewButton = new JButton("Enviar");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			    String username = "seu-email-aqui@hotmail.com"; // substitua com o seu email
+			    String username = "seu email aqui@hotmail.com"; // substitua com o seu email
 			    String password = "sua senha aqui"; // substitua com a sua senha
 			    String emailTo = emailToField.getText().trim();
 			    String[] emailToSplit = emailTo.split(",");
@@ -123,9 +126,30 @@ public class EnvioJavaMail extends JFrame {
 
 			        // Envia a mensagem
 			        Transport.send(message);
+			        
+			     // Criar JProgressBar para mostrar o loading
+			        JProgressBar progressBar = new JProgressBar(0, 100);
+			        progressBar.setIndeterminate(true);
+			        progressBar.setString("Carregando...");
+			        progressBar.setStringPainted(true);
 
-			        JOptionPane.showMessageDialog(EnvioJavaMail.this, "Email enviado com sucesso!");
+			        // Criar JOptionPane com a barra de loading
+			        JOptionPane optionPane = new JOptionPane(progressBar, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+			        JDialog dialog = optionPane.createDialog(scrollPane, "Aguarde...");
 
+
+			        // Iniciar Timer para fechar o JOptionPane após 3 segundos
+			        Timer timer = new Timer(3000, (event) -> {
+			            dialog.dispose();
+
+			            JOptionPane.showMessageDialog(EnvioJavaMail.this, "Email enviado com sucesso!");
+			        });
+			        timer.setRepeats(false);
+			        timer.start();
+
+			        // Mostrar o JOptionPane com a barra de loading
+			        dialog.setVisible(true);
+			    
 			    } catch (MessagingException ex) {
 			        JOptionPane.showMessageDialog(EnvioJavaMail.this, "Erro ao enviar email: " + ex.getMessage());
 			    }
