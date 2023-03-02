@@ -7,28 +7,28 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-public class AppTest {
+public class TesteEnvioEmailJavaMailLoginESenha {
 	public static void main(String[] args) {
 
-		// Configuração do servidor SMTP do Hotmail
-		String host = "smtp-mail.outlook.com";
-		int port = 587;
-		String username = "arthur_benfica_appteste@hotmail.com";
-		String password = "@Testesenha2525";
-
-		// Configuração das propriedades
-		Properties props = new Properties();
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.smtp.host", host);
-		props.put("mail.smtp.port", port);
-		props.put("mail.smtp.socketfactory.port", "465");
-		props.put("mail.smtp.socketfactory.class", "javax.net.ssl.SSLSocketFactory");
-
-		
 		int enviar = JOptionPane.showConfirmDialog(null, "Deseja enviar um email?");
 		
 		if(enviar == 0) {
+			// Configuração do servidor SMTP do Hotmail
+			String host = "smtp-mail.outlook.com";
+			int port = 587;
+			//String username = "seu-email-hotmail-aqui@hotmail.com"; // substitua com o seu email
+			//String password = "sua senha aqui"; // substitua com a sua senha
+			String username = JOptionPane.showInputDialog("Digite o seu endereço de e-mail:");
+			String password = JOptionPane.showInputDialog("Digite a senha do seu e-mail:");
+
+			// Configuração das propriedades
+			Properties props = new Properties();
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.starttls.enable", "true");
+			props.put("mail.smtp.host", host);
+			props.put("mail.smtp.port", port);
+			props.put("mail.smtp.socketfactory.port", "465");
+			props.put("mail.smtp.socketfactory.class", "javax.net.ssl.SSLSocketFactory");
 			String enderecoEmail = JOptionPane.showInputDialog("Digite o e-mail para qual quer fazer o envio:");
 			String assuntoEmail = JOptionPane.showInputDialog("Digite o Assunto do e-mail:");
 			JTextArea mensagemEmail = new JTextArea(10, 50);
