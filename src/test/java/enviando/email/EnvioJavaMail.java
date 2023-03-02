@@ -46,13 +46,14 @@ public class EnvioJavaMail extends JFrame {
 	public EnvioJavaMail() {
 		setTitle("Envio de email");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 550, 500);
+		setSize(550, 500);
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JLabel lblNewLabel_1 = new JLabel("Para:");
+		JLabel lblNewLabel_1 = new JLabel("Para ( ,):");
 		lblNewLabel_1.setBounds(10, 10, 130, 14);
 		contentPane.add(lblNewLabel_1);
 
@@ -84,8 +85,8 @@ public class EnvioJavaMail extends JFrame {
 		JButton btnNewButton = new JButton("Enviar");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			    String username = "seu email aqui@hotmail.com"; // substitua com o seu email
-			    String password = "sua senha aqui"; // substitua com a sua senha
+			    String username = "arthur_benfica_appteste@hotmail.com"; // substitua com o seu email
+			    String password = "@Testesenha2525"; // substitua com a sua senha
 			    String emailTo = emailToField.getText().trim();
 			    String[] emailToSplit = emailTo.split(",");
 			    String emailSubject = emailSubjectField.getText();
