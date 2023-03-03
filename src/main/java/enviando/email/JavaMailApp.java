@@ -3,6 +3,7 @@ package enviando.email;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -25,17 +26,22 @@ import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
-public class EnvioJavaMail extends JFrame {
+public class JavaMailApp extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField emailSubjectField;
 	private JTextArea emailMessageArea;
 	private JTextField emailToField;
+	private JTextField deField;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					EnvioJavaMail frame = new EnvioJavaMail();
+					JavaMailApp frame = new JavaMailApp();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -43,7 +49,7 @@ public class EnvioJavaMail extends JFrame {
 			}
 		});
 	}
-	public EnvioJavaMail() {
+	public JavaMailApp() {
 		setTitle("Envio de email");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(550, 500);
@@ -52,31 +58,40 @@ public class EnvioJavaMail extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-
-		JLabel lblNewLabel_1 = new JLabel("Para ( ,):");
+		
+		JLabel lblNewLabel_1 = new JLabel("De:");
 		lblNewLabel_1.setBounds(10, 10, 130, 14);
 		contentPane.add(lblNewLabel_1);
 
-		emailToField = new JTextField();
-		emailToField.setBounds(90, 7, 424, 20);
-		contentPane.add(emailToField);
-		emailToField.setColumns(10);
+		deField = new JTextField();
+		deField.setBounds(90, 7, 424, 20);
+		contentPane.add(deField);
+		deField.setColumns(10);
 
-		JLabel lblNewLabel_2 = new JLabel("Assunto:");
-		lblNewLabel_2.setBounds(10, 50, 130, 14);
+		JLabel lblNewLabel_2 = new JLabel("Para ( ,):");
+		lblNewLabel_2.setBounds(10, 40, 130, 14);
 		contentPane.add(lblNewLabel_2);
 
+		emailToField = new JTextField();
+		emailToField.setBounds(90, 37, 424, 20);
+		contentPane.add(emailToField);
+		emailToField.setColumns(10);
+		
+		JLabel lblNewLabel_3 = new JLabel("Assunto:");
+		lblNewLabel_3.setBounds(10, 70, 130, 14);
+		contentPane.add(lblNewLabel_3);
+
 		emailSubjectField = new JTextField();
-		emailSubjectField.setBounds(90, 47, 424, 20);
+		emailSubjectField.setBounds(90, 67, 424, 20);
 		contentPane.add(emailSubjectField);
 		emailSubjectField.setColumns(10);
 
-		JLabel lblNewLabel_3 = new JLabel("Mensagem:");
-		lblNewLabel_3.setBounds(10, 88, 130, 14);
-		contentPane.add(lblNewLabel_3);
+		JLabel lblNewLabel_4 = new JLabel("Mensagem:");
+		lblNewLabel_4.setBounds(10, 108, 130, 14);
+		contentPane.add(lblNewLabel_4);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(90, 88, 424, 294);
+		scrollPane.setBounds(90, 108, 424, 294);
 		contentPane.add(scrollPane);
 
 		emailMessageArea = new JTextArea();
@@ -85,8 +100,9 @@ public class EnvioJavaMail extends JFrame {
 		JButton btnNewButton = new JButton("Enviar");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			    String username = "arthur_benfica_appteste@hotmail.com"; // substitua com o seu email
-			    String password = "@Testesenha2525"; // substitua com a sua senha
+			    String username = "seu email@hotmail.com"; // substitua com o seu email
+			    String password = "sua senha"; // substitua com a sua senha
+			    String de = deField.getText().trim();
 			    String emailTo = emailToField.getText().trim();
 			    String[] emailToSplit = emailTo.split(",");
 			    String emailSubject = emailSubjectField.getText();
@@ -94,13 +110,14 @@ public class EnvioJavaMail extends JFrame {
 
 			    if (username.isEmpty() || password.isEmpty() || emailTo.isEmpty() || emailSubject.isEmpty()
 			            || emailMessage.isEmpty()) {
-			        JOptionPane.showMessageDialog(EnvioJavaMail.this, "Preencha todos os campos.");
+			        JOptionPane.showMessageDialog(JavaMailApp.this, "Preencha todos os campos.");
 			        return;
 			    }
 			    // Configuração das propriedades
 			    String host = "smtp-mail.outlook.com";
 			    int port = 587;
 			    Properties props = new Properties();
+			    props.put("mail.smtp.ssl.trust", "*"); /*autentica com segurança ssl*/
 			    props.put("mail.smtp.auth", "true");
 			    props.put("mail.smtp.starttls.enable", "true");
 			    props.put("mail.smtp.host", host);
@@ -118,7 +135,7 @@ public class EnvioJavaMail extends JFrame {
 			    try {
 			        // Cria a mensagem de email
 			        Message message = new MimeMessage(session);
-			        message.setFrom(new InternetAddress(username));
+			        message.setFrom(new InternetAddress(username, de));
 			        for (String address : emailToSplit) {
 			            message.addRecipient(Message.RecipientType.TO, new InternetAddress(address.trim()));
 			        }
@@ -131,7 +148,7 @@ public class EnvioJavaMail extends JFrame {
 			     // Criar JProgressBar para mostrar o loading
 			        JProgressBar progressBar = new JProgressBar(0, 100);
 			        progressBar.setIndeterminate(true);
-			        progressBar.setString("Carregando...");
+			        progressBar.setString("Enviando E-mails...");
 			        progressBar.setStringPainted(true);
 
 			        // Criar JOptionPane com a barra de loading
@@ -143,7 +160,7 @@ public class EnvioJavaMail extends JFrame {
 			        Timer timer = new Timer(3000, (event) -> {
 			            dialog.dispose();
 
-			            JOptionPane.showMessageDialog(EnvioJavaMail.this, "Email enviado com sucesso!");
+			            JOptionPane.showMessageDialog(JavaMailApp.this, "Email enviado com sucesso!");
 			        });
 			        timer.setRepeats(false);
 			        timer.start();
@@ -152,8 +169,11 @@ public class EnvioJavaMail extends JFrame {
 			        dialog.setVisible(true);
 			    
 			    } catch (MessagingException ex) {
-			        JOptionPane.showMessageDialog(EnvioJavaMail.this, "Erro ao enviar email: " + ex.getMessage());
-			    }
+			        JOptionPane.showMessageDialog(JavaMailApp.this, "Erro ao enviar email!");
+			    } catch (UnsupportedEncodingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		btnNewButton.setBounds(170, 403, 89, 23);

@@ -25,6 +25,7 @@ public class JavamailDoZero {
 		try {
 		// Configuração das propriedades
 		Properties props = new Properties();
+		props.put("mail.smtp.ssl.trust", "*"); /*autentica com segurança ssl*/
 		props.put("mail.smtp.auth", "true"); /*autorização*/
 		props.put("mail.smtp.starttls.enable", "true"); /*autenticação*/
 		props.put("mail.smtp.host", host); /*servidor*/
@@ -41,12 +42,17 @@ public class JavamailDoZero {
 		
 		Address[] toUser = InternetAddress.parse("arthur_benfica@hotmail.com , natacha-inacio@hotmail.com");
 		Message message = new MimeMessage(session);
-		message.setFrom(new InternetAddress(username)); /*Quem esta enviando*/
+		message.setFrom(new InternetAddress(username /*, remetente por escrito aqui pois o username pega só o email*/)); /*Quem esta enviando*/
 		message.setRecipients(Message.RecipientType.TO, toUser);/*email de destino*/
 		message.setSubject("Chegou email enviado com java");
 		message.setText("corpo do email");
 		
 		Transport.send(message);
+		/*caso o email não esteja enviando então
+		 * coloque um tempo de espera, mas isso
+		 * só deve ser utilizado para testes
+		 * Thread.sleep(5000);*/
+		
 		} catch (Exception e) {
 			// TODO: handle exception
 		}

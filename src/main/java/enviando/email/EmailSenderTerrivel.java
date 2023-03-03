@@ -23,7 +23,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-public class EmailSender extends JFrame {
+public class EmailSenderTerrivel extends JFrame {
 	private JPanel contentPane;
 	private JTextField emailToField;
 	private JTextField emailSubjectField;
@@ -34,7 +34,7 @@ public class EmailSender extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					EmailSender frame = new EmailSender();
+					EmailSenderTerrivel frame = new EmailSenderTerrivel();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -43,7 +43,7 @@ public class EmailSender extends JFrame {
 		});
 	}
 
-	public EmailSender() {
+	public EmailSenderTerrivel() {
 		setTitle("Enviar email");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 500);
@@ -98,7 +98,7 @@ public class EmailSender extends JFrame {
 				String emailMessage = emailMessageArea.getText();
 
 				if (emailTo.isEmpty() || emailPassword.isEmpty() || emailSubject.isEmpty() || emailMessage.isEmpty()) {
-					JOptionPane.showMessageDialog(EmailSender.this, "Preencha todos os campos.");
+					JOptionPane.showMessageDialog(EmailSenderTerrivel.this, "Preencha todos os campos.");
 					return;
 				}
 
@@ -131,10 +131,10 @@ public class EmailSender extends JFrame {
 					// Envia a mensagem
 					Transport.send(message);
 
-					JOptionPane.showMessageDialog(EmailSender.this, "Email enviado com sucesso!");
+					JOptionPane.showMessageDialog(EmailSenderTerrivel.this, "Email enviado com sucesso!");
 
 				} catch (MessagingException ex) {
-					JOptionPane.showMessageDialog(EmailSender.this, "Erro ao enviar email: " + ex.getMessage());
+					JOptionPane.showMessageDialog(EmailSenderTerrivel.this, "Erro ao enviar email: " + ex.getMessage());
 				}
 
 			}
