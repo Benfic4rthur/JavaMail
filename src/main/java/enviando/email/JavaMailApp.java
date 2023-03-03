@@ -95,6 +95,7 @@ public class JavaMailApp extends JFrame {
 		contentPane.add(scrollPane);
 
 		emailMessageArea = new JTextArea();
+		emailMessageArea.setLineWrap(true); // adiciona a quebra de linha automática
 		scrollPane.setViewportView(emailMessageArea);
 
 		JButton btnNewButton = new JButton("Enviar");

@@ -7,8 +7,8 @@ public class AppTeste {
 		
 		ObjetoEnviaEmail enviaEmail = 
 				new ObjetoEnviaEmail(
-						"arthur_benfica@hotmail.com, natacha-inacio@hotmail.com", 
-						"Arthur Benfica", 
+						"", 
+						"", 
 						"testando envio de emails", 
 						"testando envio de emails");
 		enviaEmail.enviarEmail();

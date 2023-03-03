@@ -29,7 +29,7 @@ public class EnvioJavaMail {
         this.mensagem = mensagem;
     }
 
-    public boolean enviarEmail() {
+    public boolean enviarEmail(boolean envioHtml) {
         boolean enviadoComSucesso = false;
      // Configuração das propriedades
         
@@ -57,9 +57,12 @@ public class EnvioJavaMail {
 	            message.addRecipient(Message.RecipientType.TO, new InternetAddress(address.trim()));
 	        }
 	        message.setSubject(assunto);
-	        message.setText(mensagem);
-
-	        // Envia a mensagem
+	        if (envioHtml) {
+	        	message.setContent(mensagem, "text/html; charset=utf8");
+	        }else {
+				message.setText(mensagem);
+			}
+	          // Envia a mensagem
 	        Transport.send(message);
             enviadoComSucesso = true;
         } catch (MessagingException | UnsupportedEncodingException e) {
