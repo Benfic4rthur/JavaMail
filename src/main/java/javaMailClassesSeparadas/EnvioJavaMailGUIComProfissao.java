@@ -16,17 +16,19 @@ import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
-public class EnvioJavaMailGUI extends JFrame {
+public class EnvioJavaMailGUIComProfissao extends JFrame {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private JTextField deField;
+	private JTextField telefoneField;
+	private JTextField cargoField;
+	private JTextField emailToField;
 	private JTextField emailSubjectField;
 	private JTextArea emailMessageArea;
-	private JTextField emailToField;
-	private JTextField deField;
 	private JProgressBar progressBar;
 	private Timer timer;
 
@@ -34,7 +36,7 @@ public class EnvioJavaMailGUI extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					EnvioJavaMailGUI frame = new EnvioJavaMailGUI();
+					EnvioJavaMailGUIComProfissao frame = new EnvioJavaMailGUIComProfissao();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -42,49 +44,72 @@ public class EnvioJavaMailGUI extends JFrame {
 			}
 		});
 	}
+	
 
-	public EnvioJavaMailGUI() {
+	public EnvioJavaMailGUIComProfissao() {
 		setTitle("Envio de email");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 420);
+		setBounds(100, 100, 500, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		/*Labels*/
 
-		JLabel lblDe = new JLabel("De:");
-		lblDe.setBounds(10, 10, 46, 14);
-		contentPane.add(lblDe);
+		JLabel lblde = new JLabel("Seu Nome:");
+		lblde.setBounds(10, 10, 66, 14);
+		contentPane.add(lblde);
+		
+		JLabel lblFone = new JLabel("Seu Telefone:");
+		lblFone.setBounds(10, 35, 96, 14);
+		contentPane.add(lblFone);
+		
+		JLabel lblCargo = new JLabel("Sua Profissão:");
+		lblCargo.setBounds(10, 60, 96, 14);
+		contentPane.add(lblCargo);
 
 		JLabel lblPara = new JLabel("Para:");
-		lblPara.setBounds(10, 35, 46, 14);
+		lblPara.setBounds(10, 85, 46, 14);
 		contentPane.add(lblPara);
 
 		JLabel lblAssunto = new JLabel("Assunto:");
-		lblAssunto.setBounds(10, 60, 66, 14);
+		lblAssunto.setBounds(10, 110, 66, 14);
 		contentPane.add(lblAssunto);
 
 		JLabel lblMensagem = new JLabel("Mensagem:");
-		lblMensagem.setBounds(10, 85, 66, 14);
+		lblMensagem.setBounds(10, 135, 66, 14);
 		contentPane.add(lblMensagem);
+		
+		/*Text Fields*/
+		
+		deField = new JTextField();
+		deField.setBounds(106, 7, 335, 20);
+		contentPane.add(deField);
+		deField.setColumns(10);
+		
+		telefoneField = new JTextField();
+		telefoneField.setBounds(106, 32, 335, 20);
+		contentPane.add(telefoneField);
+		telefoneField.setColumns(10);
 
-		emailSubjectField = new JTextField();
-		emailSubjectField.setBounds(86, 57, 335, 20);
-		contentPane.add(emailSubjectField);
-		emailSubjectField.setColumns(10);
-
+		cargoField = new JTextField();
+		cargoField.setBounds(106, 57, 335, 20);
+		contentPane.add(cargoField);
+		cargoField.setColumns(10);
+		
 		emailToField = new JTextField();
-		emailToField.setBounds(86, 32, 335, 20);
+		emailToField.setBounds(106, 82, 335, 20);
 		contentPane.add(emailToField);
 		emailToField.setColumns(10);
 
-		deField = new JTextField();
-		deField.setBounds(86, 7, 335, 20);
-		contentPane.add(deField);
-		deField.setColumns(10);
+		emailSubjectField = new JTextField();
+		emailSubjectField.setBounds(106, 107, 335, 20);
+		contentPane.add(emailSubjectField);
+		emailSubjectField.setColumns(10);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(86, 82, 335, 202);
+		scrollPane.setBounds(106, 132, 335, 152);
 		contentPane.add(scrollPane);
 
 		emailMessageArea = new JTextArea();
@@ -97,12 +122,12 @@ public class EnvioJavaMailGUI extends JFrame {
 				enviarEmail();
 			}
 		});
-		btnEnviar.setBounds(10, 331, 89, 23);
+		btnEnviar.setBounds(10, 301, 89, 23);
 		contentPane.add(btnEnviar);
 
 		progressBar = new JProgressBar();
 		progressBar.setStringPainted(true);
-		progressBar.setBounds(109, 331, 315, 23);
+		progressBar.setBounds(109, 301, 335, 23);
 		progressBar.setValue(0); // Definindo valor inicial como zero
 		contentPane.add(progressBar);
 
@@ -121,15 +146,24 @@ public class EnvioJavaMailGUI extends JFrame {
 
 
 	}
-
 	private void enviarEmail() {
+		 String telefone = telefoneField.getText();
+		    telefone = telefone.replaceAll("[^0-9]", ""); // remove todos os caracteres não numéricos
+		    if (telefone.length() >= 2) {
+		        telefone = "(" + telefone.substring(0, 2) + ")" + telefone.substring(2);
+		    }
+		    if (telefone.length() >= 9) {
+		        telefone = telefone.substring(0, 8) + "-" + telefone.substring(8);
+		    }
+		    telefoneField.setText(telefone);
+		String profissao = cargoField.getText();
 		String de = deField.getText();
-		String para = emailToField.getText().trim();
+		String para = emailToField.getText();
 		String assunto = emailSubjectField.getText();
 		String mensagem = emailMessageArea.getText();
 		String username = "seu email aqui";
 		String password = "gujmjlcresqnxvux";
-		if (de.isEmpty() || para.isEmpty() || assunto.isEmpty() || mensagem.isEmpty()) {
+		if (de.isEmpty() || para.isEmpty() || assunto.isEmpty() || mensagem.isEmpty() || telefone.isEmpty() || profissao.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos.");
 			return;
 		}
@@ -137,11 +171,14 @@ public class EnvioJavaMailGUI extends JFrame {
 		stringBuilder.append("<html><body style='background-color:#F5F5F5;'>");
 		stringBuilder.append("<div style='background-color:#FFFFFF;padding:20px;'>");
 		stringBuilder
-				.append("<h1 style='color:#333;font-size:22px;font-weight:bold;margin-top:0;'>" + mensagem + "</h1>");
+		.append("<h1 style='color:#333;font-size:22px;font-weight:bold;margin-top:0;'>" + assunto + "</h1>");
+		stringBuilder
+				.append("<h1 style='color:#333;font-size:16px;font-weight:bold;margin-top:0;'>" + mensagem + "</h1>");
 		stringBuilder.append("<p style='margin-bottom:20px;font-size:14px;'>");
-		stringBuilder.append("<span style='font-size:18px;font-weight:bold;'>Arthur Benfica</span><br>");
-		stringBuilder.append("Java Developer<br>");
-		stringBuilder.append("(51) 991640517<br>");
+		stringBuilder.append("<br>");
+		stringBuilder.append("<span style='font-size:14px;font-weight:bold;'>"+de+"</span><br>");
+		stringBuilder.append(profissao +"<br>");
+		stringBuilder.append(telefone + "<br>");
 		stringBuilder.append("“A grandeza não consiste em receber honras, mas em merecê-las.”</p>");
 		stringBuilder.append(
 				"<p style='color:#888;'>Obs.: As informações contidas neste e-mail e nos arquivos anexados podem ser informações confidenciais ou privilegiadas.<br>");

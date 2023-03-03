@@ -3,6 +3,7 @@ package javaMailClassesSeparadas;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
+import javax.lang.model.element.NestingKind;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -19,6 +20,7 @@ public class EnvioJavaMail {
     private String[] para;
     private String assunto = "";
     private String mensagem = "";
+
 
     public EnvioJavaMail(String username, String password, String de, String para, String assunto, String mensagem) {
     	this.username = username;
