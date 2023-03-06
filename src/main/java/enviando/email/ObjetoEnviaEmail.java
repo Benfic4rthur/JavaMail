@@ -1,5 +1,8 @@
 package enviando.email;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
@@ -12,6 +15,11 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 
 
 public class ObjetoEnviaEmail {
@@ -61,4 +69,15 @@ public class ObjetoEnviaEmail {
 
 		Transport.send(message);
 	}
-}
+		/*Esse metodo simula o pdf ou um anexo*/
+		private FileInputStream simuladordePdf() throws Exception{
+			Document docmDocument = new Document();
+			File file = new File("anexo.pdf");
+			file.createNewFile();
+			PdfWriter.getInstance(docmDocument, new FileOutputStream(file));
+			docmDocument.open();
+			docmDocument.add(new Paragraph(mensagemEmail));
+			docmDocument.close();
+			return new FileInputStream(file);
+		}
+	}
