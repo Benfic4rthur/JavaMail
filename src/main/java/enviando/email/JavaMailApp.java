@@ -145,6 +145,9 @@ public class JavaMailApp extends JFrame {
 
 			        // Envia a mensagem
 			        Transport.send(message);
+			        JScrollPane scrollPane = new JScrollPane();
+					scrollPane.setBounds(90, 108, 424, 294);
+					contentPane.add(scrollPane);
 			        
 			     // Criar JProgressBar para mostrar o loading
 			        JProgressBar progressBar = new JProgressBar(0, 100);

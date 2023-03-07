@@ -20,7 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
-public class EnvioJavaMailGUIComProfissao extends JFrame {
+public class JavaMailGuiComBotaoLimpar extends JFrame {
 
 	/**
 	 * 
@@ -43,7 +43,7 @@ public class EnvioJavaMailGUIComProfissao extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					EnvioJavaMailGUIComProfissao frame = new EnvioJavaMailGUIComProfissao();
+					JavaMailGuiComBotaoLimpar frame = new JavaMailGuiComBotaoLimpar();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -51,7 +51,7 @@ public class EnvioJavaMailGUIComProfissao extends JFrame {
 			}
 		});
 	}
-	public EnvioJavaMailGUIComProfissao() {
+	public JavaMailGuiComBotaoLimpar() {
 		setTitle("Envio de email");
 		setBounds(100, 100, 470, 380);
 		contentPane = new JPanel();
@@ -59,7 +59,7 @@ public class EnvioJavaMailGUIComProfissao extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		// Configura o tamanho da janela
-		setSize(470, 380);
+		setSize(470, 420);
 		// Obtém as dimensões da tela
 		Dimension tela = Toolkit.getDefaultToolkit().getScreenSize();
 		// Calcula a posição da janela no centro da tela
@@ -145,7 +145,7 @@ public class EnvioJavaMailGUIComProfissao extends JFrame {
 		btnAnexar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser chooser = new JFileChooser();
-				int returnVal = chooser.showOpenDialog(EnvioJavaMailGUIComProfissao.this);
+				int returnVal = chooser.showOpenDialog(JavaMailGuiComBotaoLimpar.this);
 				if(returnVal == JFileChooser.APPROVE_OPTION) {
 					anexo = chooser.getSelectedFile();
 					anexoField.setText(anexo.getName());
@@ -165,20 +165,37 @@ public class EnvioJavaMailGUIComProfissao extends JFrame {
 			}
 		});
 		
-		btnEnviar.setBounds(10, 300, 89, 23);
+		btnEnviar.setBounds(130, 340, 89, 23);
 		contentPane.add(btnEnviar);
-
+		
+		JButton btnLimpar = new JButton("Limpar");
+		btnLimpar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				emailSubjectField.setText("");
+				emailMessageArea.setText("");
+				deField.setText("");
+				telefoneField.setText("");
+				cargoField.setText("");
+				emailToField.setText("");
+				}
+		});
+		btnLimpar.setBounds(230, 340, 89, 23);
+		contentPane.add(btnLimpar);
+		//criar um actionlistener no botão enviar para gerar a progressbar
 		progressBar = new JProgressBar();
 		progressBar.setStringPainted(true);
-		progressBar.setBounds(109, 301, 335, 23);
-		progressBar.setValue(0); // Definindo valor inicial como zero
+		progressBar.setBounds(10, 301, 430, 23);
+		progressBar.setString("Aguardando envio de e-mails"); // Definindo valor inicial como zero
 		contentPane.add(progressBar);
 
 		timer = new Timer(500, new ActionListener() {
 		    public void actionPerformed(ActionEvent evt) {
-		        int value = progressBar.getValue() + 10;
-		        if (value < 100) {
-		            progressBar.setValue(value);
+		    	 int value = progressBar.getValue() + 10;
+			    String valor = progressBar.getString();
+		        if (valor == ("Aguardando envio de e-mails") || value <= 100) {
+		        	progressBar.setString("Enviando E-mails...");
+			        progressBar.setStringPainted(true);
+			        progressBar.setValue(value);
 		        } else {
 		            timer.stop();
 		            JOptionPane.showMessageDialog(null, "Email enviado com sucesso!");
@@ -186,8 +203,6 @@ public class EnvioJavaMailGUIComProfissao extends JFrame {
 		        }
 		    }
 		});
-
-
 	}
 	private void enviarEmail() throws IOException, Exception {
 		 String telefone = telefoneField.getText();
@@ -204,7 +219,7 @@ public class EnvioJavaMailGUIComProfissao extends JFrame {
 		String para = emailToField.getText();
 		String assunto = emailSubjectField.getText();
 		String mensagem = emailMessageArea.getText();
-		String username = "seu email hotmail@hotmail.com";
+		String username = "seu email hotmail aqui@hotmail.com";
 		String password = "mhytboqxsugbwiyo";
 		StringBuilder stringBuildermensagemEmail = new StringBuilder();
 		stringBuildermensagemEmail.append("<html><body style='background-color:#F5F5F5;'>");
